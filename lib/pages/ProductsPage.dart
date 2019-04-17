@@ -1,8 +1,13 @@
+import 'package:first_flutter_app/domain/image.dart';
 import 'package:first_flutter_app/pages/ProductAdmin.dart';
 import 'package:first_flutter_app/productManager.dart';
 import 'package:flutter/material.dart';
 
 class ProductsPage extends StatelessWidget {
+  final List<CustomImage> products;
+
+  ProductsPage(this.products);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +30,6 @@ class ProductsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('EasyListt'),
         ),
-        body: ProductManager());
+        body: ProductManager(products));
   }
 }

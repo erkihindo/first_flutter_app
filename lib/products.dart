@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 
 class Products extends StatelessWidget {
   final List<CustomImage> _products;
-  final Function deleteProduct;
 
-  Products(this._products, {this.deleteProduct});
+  Products(this._products);
 
   Widget _buildProductItem(BuildContext context, int index) {
     return Card(
@@ -22,9 +21,7 @@ class Products extends StatelessWidget {
                 onPressed: () => Navigator.push<bool>(context,
                     MaterialPageRoute(builder: (context) => ProductDetails(_products[index]))
                 ).then((bool value) {
-                  if (value) {
-                    this.deleteProduct(index);
-                  }
+
                 }),
               )
             ],
