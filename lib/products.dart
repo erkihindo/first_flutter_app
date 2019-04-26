@@ -12,17 +12,49 @@ class Products extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset('assets/food.jpg'),
-          Text(_products[index].title),
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      _products[index].title,
+                      style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Oswald'),
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 2.5),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Text(
+                          '€${_products[index].price.toString()}',
+                          style: TextStyle(color: Colors.white),
+                        ))
+                  ])),
+          DecoratedBox(
+            child: Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5), child: Text("Somewhere TLN"),),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(4.0)),
+          ),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(
                 child: Text("Details"),
-                onPressed: () => Navigator.push<bool>(context,
-                    MaterialPageRoute(builder: (context) => ProductDetails(_products[index]))
-                ).then((bool value) {
-
-                }),
+                onPressed: () => Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetails(_products[index])))
+                    .then((bool value) {}),
               )
             ],
           )
