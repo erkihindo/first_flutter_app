@@ -6,47 +6,41 @@ class ProductDetails extends StatelessWidget {
 
   ProductDetails(this._product);
 
-  _showDeleteAlert(context) {
-    return showDialog(builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Are you sure?"),
-        content: Text("This action cannot be undone"),
-        actions: <Widget>[
-          FlatButton(child: Text("Delete"), onPressed: () {
-            Navigator.pop(context);
-            Navigator.pop(context, true);
-          },),
-          FlatButton(child: Text("Cancel"), onPressed: () {
-            Navigator.pop(context);
-
-          },)
-        ],
-      );
-    }, context: context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: Text(_product.title),
+            title: Text(
+              _product.title,
+              style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Oswald'),
+            ),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Image.asset(_product.url),
+              SizedBox(height: 10.0,),
+              DecoratedBox(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+                  child: Text("Somewhere TLN"),
+                ),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4.0)),
+              ),
               Container(
                 padding: EdgeInsets.all(10.0),
-                child: Text("Some details"),
+                child: Text("Details: ${_product.description}"),
               ),
-              RaisedButton(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
-                child: Text("DELETE"),
-                onPressed: () => _showDeleteAlert(context),
-              )
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Price: ${_product.price}"),
+              ),
             ],
           )),
       onWillPop: () {

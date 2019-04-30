@@ -3,8 +3,10 @@ import 'package:first_flutter_app/pages/ProductAdmin.dart';
 import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:first_flutter_app/pages/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 main() {
+//  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
@@ -34,6 +36,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    this._addProduct(new CustomImage('assets/food.jpg', 'Title', 1.0, 'desc'));
     return MaterialApp(
       theme: ThemeData(
 //        brightness: Brightness.dark,
@@ -42,8 +45,8 @@ class _MyAppState extends State<MyApp> {
       ),
 //      home: AuthPage(),
       routes: {
-        '/': (context) => AuthPage(),
-        '/products': (context) => ProductsPage(_products),
+        '/login': (context) => AuthPage(),
+        '/': (context) => ProductsPage(_products),
         '/admin': (context) => ProductAdmin(_addProduct, _deleteProduct)
       },
     );

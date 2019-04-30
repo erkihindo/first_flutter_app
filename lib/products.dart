@@ -39,7 +39,10 @@ class Products extends StatelessWidget {
                         ))
                   ])),
           DecoratedBox(
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5), child: Text("Somewhere TLN"),),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+              child: Text("Somewhere TLN"),
+            ),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(4.0)),
@@ -47,8 +50,19 @@ class Products extends StatelessWidget {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
-                child: Text("Details"),
+              IconButton(
+                icon: Icon(Icons.info),
+                color: Theme.of(context).accentColor,
+                onPressed: () => Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetails(_products[index])))
+                    .then((bool value) {}),
+              ),
+              IconButton(
+                icon: Icon(Icons.favorite_border),
+                color: Colors.red,
                 onPressed: () => Navigator.push<bool>(
                         context,
                         MaterialPageRoute(

@@ -1,4 +1,3 @@
-import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -15,11 +14,20 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget createUserForm() {
     return Container(
-        margin: EdgeInsets.all(10.0),
-        child: ListView(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                fit: BoxFit.cover,
+                image: AssetImage('assets/background.jpg'))),
+        padding: EdgeInsets.all(10.0),
+        child: Center(
+            child: SingleChildScrollView(
+                child: Column(
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                  labelText: 'Email', filled: true, fillColor: Colors.white),
               keyboardType: TextInputType.emailAddress,
               onChanged: (newValue) {
                 setState(() {
@@ -29,7 +37,8 @@ class _AuthPageState extends State<AuthPage> {
             ),
             TextField(
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                  labelText: 'Password', filled: true, fillColor: Colors.white),
               onChanged: (newValue) {
                 setState(() {
                   password = newValue;
@@ -42,8 +51,9 @@ class _AuthPageState extends State<AuthPage> {
                 setState(() {
                   this.acceptTerms = value;
                 });
-            },
-            title: Text("Accept terms"),),
+              },
+              title: Text("Accept terms"),
+            ),
             SizedBox(
               height: 10.0,
             ),
@@ -55,7 +65,7 @@ class _AuthPageState extends State<AuthPage> {
               },
             )
           ],
-        ));
+        ))));
   }
 
   @override
