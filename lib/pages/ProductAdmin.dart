@@ -14,23 +14,7 @@ class ProductAdmin extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              AppBar(
-                automaticallyImplyLeading: false,
-                title: Text("Choose"),
-              ),
-              ListTile(
-                leading: Icon(Icons.format_list_bulleted),
-                title: Text("All products"),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, "/products");
-                },
-              )
-            ],
-          ),
-        ),
+        drawer: buildDrawer(context),
         appBar: AppBar(
           title: Text("AdminPage"),
           bottom: TabBar(tabs: <Widget>[
@@ -50,5 +34,25 @@ class ProductAdmin extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  Drawer buildDrawer(BuildContext context) {
+    return Drawer(
+        child: Column(
+          children: <Widget>[
+            AppBar(
+              automaticallyImplyLeading: false,
+              title: Text("Choose"),
+            ),
+            ListTile(
+              leading: Icon(Icons.format_list_bulleted),
+              title: Text("All products"),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, "/products");
+              },
+            )
+          ],
+        ),
+      );
   }
 }

@@ -14,58 +14,73 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget createUserForm() {
     return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                fit: BoxFit.cover,
-                image: AssetImage('assets/background.jpg'))),
+        decoration: BoxDecoration(image: this._buildBackgroundImage()),
         padding: EdgeInsets.all(10.0),
         child: Center(
             child: SingleChildScrollView(
                 child: Column(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                  labelText: 'Email', filled: true, fillColor: Colors.white),
-              keyboardType: TextInputType.emailAddress,
-              onChanged: (newValue) {
-                setState(() {
-                  email = newValue;
-                });
-              },
-            ),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                  labelText: 'Password', filled: true, fillColor: Colors.white),
-              onChanged: (newValue) {
-                setState(() {
-                  password = newValue;
-                });
-              },
-            ),
-            SwitchListTile(
-              value: acceptTerms,
-              onChanged: (bool value) {
-                setState(() {
-                  this.acceptTerms = value;
-                });
-              },
-              title: Text("Accept terms"),
-            ),
+            _buildEmailTextField(),
+            _buildPasswordTextField(),
+            _buildAcceptSwitch(),
             SizedBox(
               height: 10.0,
             ),
             RaisedButton(
               color: Theme.of(context).accentColor,
               child: Text('Create'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, "/products");
-              },
+              onPressed: _submitForm,
             )
           ],
         ))));
+  }
+
+  void _submitForm() {
+    print("Submitted form");
+    Navigator.pushReplacementNamed(context, "/products");
+  }
+
+  DecorationImage _buildBackgroundImage() {
+    return DecorationImage(
+        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+        fit: BoxFit.cover,
+        image: AssetImage('assets/background.jpg'));
+  }
+
+  SwitchListTile _buildAcceptSwitch() {
+    return SwitchListTile(
+      value: acceptTerms,
+      onChanged: (bool value) {
+        setState(() {
+          this.acceptTerms = value;
+        });
+      },
+      title: Text("Accept terms"),
+    );
+  }
+
+  TextField _buildPasswordTextField() {
+    return TextField(
+      obscureText: true,
+      decoration: InputDecoration(labelText: 'Password', filled: true, fillColor: Colors.white),
+      onChanged: (newValue) {
+        setState(() {
+          password = newValue;
+        });
+      },
+    );
+  }
+
+  TextField _buildEmailTextField() {
+    return TextField(
+      decoration: InputDecoration(labelText: 'Email', filled: true, fillColor: Colors.white),
+      keyboardType: TextInputType.emailAddress,
+      onChanged: (newValue) {
+        setState(() {
+          email = newValue;
+        });
+      },
+    );
   }
 
   @override

@@ -20,29 +20,26 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
 
   _ProductCreatePageState(this.addProduct);
 
+  _buildInputTextField(String text, Function onChanged, int maxLines) {
+    return TextField(maxLines: maxLines, decoration: InputDecoration(labelText: text), onChanged: onChanged);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(labelText: 'Title'),
-              onChanged: (newValue) {
-                setState(() {
-                  title = newValue;
-                });
-              },
-            ),
-            TextField(
-              maxLines: 4,
-              decoration: InputDecoration(labelText: 'Description'),
-              onChanged: (newValue) {
-                setState(() {
-                  description = newValue;
-                });
-              },
-            ),
+            this._buildInputTextField('Title', (newValue) {
+              setState(() {
+                title = newValue;
+              });
+            }, 1),
+            this._buildInputTextField('Description', (newValue) {
+              setState(() {
+                description = newValue;
+              });
+            }, 4),
             TextField(
               keyboardType: TextInputType.numberWithOptions(),
               decoration: InputDecoration(labelText: 'Price'),
@@ -52,13 +49,15 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                 });
               },
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             RaisedButton(
               color: Theme.of(context).accentColor,
               child: Text('Create'),
               onPressed: () {
-                CustomImage newProduct = new CustomImage(
-                    'assets/food.jpg', title, price, description);
+                print(title);
+                CustomImage newProduct = new CustomImage('assets/food.jpg', title, price, description);
                 this.addProduct(newProduct);
               },
             )
