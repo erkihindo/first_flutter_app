@@ -17,11 +17,18 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String description = '';
   double price = 0.0;
   final Function addProduct;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _ProductCreatePageState(this.addProduct);
 
-  _buildInputTextField(String text, Function onChanged, int maxLines) {
-    return TextField(maxLines: maxLines, decoration: InputDecoration(labelText: text), onChanged: onChanged);
+  void submitForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    CustomImage newProduct =
+        new CustomImage('assets/food.jpg', title, price, description);
+    this.addProduct(newProduct);
   }
 
   @override
@@ -31,52 +38,60 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     final double targetPadding = deviceWidth - targetWidth;
     return Container(
         margin: EdgeInsets.all(10.0),
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: targetPadding),
-          children: <Widget>[
-            this._buildInputTextField('Title', (newValue) {
-              setState(() {
-                title = newValue;
-              });
-            }, 1),
-            this._buildInputTextField('Description', (newValue) {
-              setState(() {
-                description = newValue;
-              });
-            }, 4),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(),
-              decoration: InputDecoration(labelText: 'Price'),
-              onChanged: (newValue) {
-                setState(() {
-                  price = double.parse(newValue);
-                });
-              },
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-//            RaisedButton(
-//              color: Theme.of(context).accentColor,
-//              child: Text('Create'),
-//              onPressed: () {
-//                print(title);
-//                CustomImage newProduct = new CustomImage('assets/food.jpg', title, price, description);
-//                this.addProduct(newProduct);
-//              },
-//            )
-            GestureDetector(
-              child: Container(
-                color: Colors.green,
-                padding: EdgeInsets.all(5.0),
-                child: Text("My button"),
-              ),
-              onTap: () {
-                print("Clicked container");
-              }
-              ,
-            )
-          ],
-        ));
+        child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: targetPadding),
+              children: <Widget>[
+                TextFormField(
+                  maxLines: 1,
+                  decoration: InputDecoration(labelText: 'Title'),
+                  validator: (String input) {
+                    if (input.trim().length <= 2)
+                      return 'Title should be at least 3 characters long';
+                  },
+                  onSaved: (String newValue) {
+                    setState(() {
+                      title = newValue;
+                    });
+                  },
+                ),
+                TextFormField(
+                  maxLines: 4,
+                  decoration: InputDecoration(labelText: 'Description'),
+                  validator: (String input) {
+                    if (input.trim().length <= 4)
+                      return 'Description should be at least 5 characters long';
+                  },
+                  onSaved: (String newValue) {
+                    setState(() {
+                      description = newValue;
+                    });
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(),
+                  decoration: InputDecoration(labelText: 'Price'),
+                  validator: (String input) {
+                    if (input.isEmpty ||
+                        RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(input))
+                      return 'Price is required and should be a number';
+                  },
+                  onSaved: (String newValue) {
+                    setState(() {
+                      price = double.parse(newValue);
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text('Create'),
+                  onPressed: this.submitForm,
+                )
+              ],
+            )));
   }
 }
