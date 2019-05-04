@@ -26,9 +26,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550 ? 500 : deviceWidth * 0.95;
+    final double targetPadding = deviceWidth - targetWidth;
     return Container(
         margin: EdgeInsets.all(10.0),
         child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: targetPadding),
           children: <Widget>[
             this._buildInputTextField('Title', (newValue) {
               setState(() {
@@ -52,14 +56,25 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
             SizedBox(
               height: 10.0,
             ),
-            RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text('Create'),
-              onPressed: () {
-                print(title);
-                CustomImage newProduct = new CustomImage('assets/food.jpg', title, price, description);
-                this.addProduct(newProduct);
-              },
+//            RaisedButton(
+//              color: Theme.of(context).accentColor,
+//              child: Text('Create'),
+//              onPressed: () {
+//                print(title);
+//                CustomImage newProduct = new CustomImage('assets/food.jpg', title, price, description);
+//                this.addProduct(newProduct);
+//              },
+//            )
+            GestureDetector(
+              child: Container(
+                color: Colors.green,
+                padding: EdgeInsets.all(5.0),
+                child: Text("My button"),
+              ),
+              onTap: () {
+                print("Clicked container");
+              }
+              ,
             )
           ],
         ));

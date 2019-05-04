@@ -13,12 +13,16 @@ class _AuthPageState extends State<AuthPage> {
   bool acceptTerms = false;
 
   Widget createUserForm() {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final targetWidth =  deviceWidth * 0.8 > 350.0 ? 200.0 : deviceWidth * 0.95;
     return Container(
         decoration: BoxDecoration(image: this._buildBackgroundImage()),
         padding: EdgeInsets.all(10.0),
         child: Center(
             child: SingleChildScrollView(
-                child: Column(
+                child: Container(
+                  width: targetWidth,
+                    child: Column(
           children: <Widget>[
             _buildEmailTextField(),
             _buildPasswordTextField(),
@@ -32,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
               onPressed: _submitForm,
             )
           ],
-        ))));
+        )))));
   }
 
   void _submitForm() {
