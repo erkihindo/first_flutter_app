@@ -28,6 +28,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _updateProduct(int index, CustomImage productUpdate) {
+    setState(() {
+      _products[index] = productUpdate;
+    });
+
+  }
+
   void _deleteProduct(int index) {
     setState(() {
       this._products.removeAt(index);
@@ -47,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => AuthPage(),
         '/products': (context) => ProductsPage(_products),
-        '/admin': (context) => ProductAdmin(_addProduct, _deleteProduct)
+        '/admin': (context) => ProductAdmin(_addProduct, _updateProduct ,_deleteProduct, _products)
       },
     );
   }

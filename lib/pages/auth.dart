@@ -8,45 +8,57 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final emailRegexp = RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+
   String email = '';
   String password = '';
   bool acceptTerms = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget createUserForm() {
-    final double deviceWidth = MediaQuery.of(context).size.width;
-    final targetWidth =  deviceWidth * 0.8 > 350.0 ? 200.0 : deviceWidth * 0.95;
-    return Container(
-        decoration: BoxDecoration(image: this._buildBackgroundImage()),
-        padding: EdgeInsets.all(10.0),
-        child: Center(
-            child: SingleChildScrollView(
-                child: Container(
-                  width: targetWidth,
-                    child: Column(
-          children: <Widget>[
-            _buildEmailTextField(),
-            _buildPasswordTextField(),
-            _buildAcceptSwitch(),
-            SizedBox(
-              height: 10.0,
-            ),
-            RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text('Create'),
-              onPressed: _submitForm,
-            )
-          ],
-        )))));
+    return GestureDetector(
+        // clicking on random spot will close keyboard
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+            decoration: BoxDecoration(image: this._buildBackgroundImage()),
+            padding: EdgeInsets.all(10.0),
+            child: Center(
+                child: SingleChildScrollView(
+                    child: Container(
+                        child: Form(
+                          key: _formKey,
+                            child: Column(
+              children: <Widget>[
+                _buildEmailTextField(),
+                _buildPasswordTextField(),
+                _buildAcceptSwitch(),
+                SizedBox(
+                  height: 10.0,
+                ),
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text('Create'),
+                  onPressed: _submitForm,
+                )
+              ],
+            )))))));
   }
 
   void _submitForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
     print("Submitted form");
     Navigator.pushReplacementNamed(context, "/products");
   }
 
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
-        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+        colorFilter:
+            ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
         fit: BoxFit.cover,
         image: AssetImage('assets/background.jpg'));
   }
@@ -63,26 +75,34 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  TextField _buildPasswordTextField() {
-    return TextField(
+  TextFormField _buildPasswordTextField() {
+    return TextFormField(
       obscureText: true,
-      decoration: InputDecoration(labelText: 'Password', filled: true, fillColor: Colors.white),
-      onChanged: (newValue) {
-        setState(() {
+      decoration: InputDecoration(
+          labelText: 'Password', filled: true, fillColor: Colors.white),
+      validator: (String value) {
+        if (value.isEmpty || value.length < 6) {
+          return 'Password invalid';
+        }
+      },
+      onSaved: (newValue) {
           password = newValue;
-        });
       },
     );
   }
 
-  TextField _buildEmailTextField() {
-    return TextField(
-      decoration: InputDecoration(labelText: 'Email', filled: true, fillColor: Colors.white),
+  TextFormField _buildEmailTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: 'Email', filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.emailAddress,
-      onChanged: (newValue) {
-        setState(() {
+      validator: (input) {
+        if (!emailRegexp.hasMatch(input)) {
+          return "Please enter correct email";
+        };
+      },
+      onSaved: (newValue) {
           email = newValue;
-        });
       },
     );
   }

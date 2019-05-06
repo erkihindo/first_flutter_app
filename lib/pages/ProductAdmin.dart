@@ -1,4 +1,6 @@
+import 'package:first_flutter_app/domain/image.dart';
 import 'package:first_flutter_app/pages/ProductCreate.dart';
+import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:first_flutter_app/pages/ProductList.dart';
 import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +8,10 @@ import 'package:flutter/material.dart';
 class ProductAdmin extends StatelessWidget {
   final Function addProduct;
   final Function deleteProduct;
+  final Function updateProduct;
+  final List<CustomImage> products;
 
-  ProductAdmin(this.addProduct, this.deleteProduct);
+  ProductAdmin(this.addProduct, this.updateProduct, this.deleteProduct, this.products);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class ProductAdmin extends StatelessWidget {
           bottom: TabBar(tabs: <Widget>[
             Tab(
               icon: Icon(Icons.check_circle_outline),
-              text: "Create product",
+              text: "Edit product",
             ),
             Tab(
               icon: Icon(Icons.map),
@@ -29,8 +33,8 @@ class ProductAdmin extends StatelessWidget {
           ]),
         ),
         body: TabBarView(children: <Widget>[
-          ProductCreatePage(addProduct: this.addProduct),
-          ProductListPage()
+          ProductEditPage(addProduct: this.addProduct),
+          ProductListPage(products, this.updateProduct)
         ]),
       ),
     );
