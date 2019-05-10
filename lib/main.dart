@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
       ),
 //      home: AuthPage(),
       routes: {
-        '/': (context) => AuthPage(),
+        '/': (context) => ProductsPage(_products),
         '/products': (context) => ProductsPage(_products),
         '/admin': (context) => ProductAdmin(_addProduct, _updateProduct ,_deleteProduct, _products)
       },
