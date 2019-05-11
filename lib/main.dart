@@ -1,4 +1,4 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/pages/ProductAdmin.dart';
 import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:first_flutter_app/pages/auth.dart';
@@ -20,15 +20,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  List<CustomImage> _products = [];
+  List<Product> _products = [];
 
-  void _addProduct(CustomImage product) {
+  void _addProduct(Product product) {
     setState(() {
       this._products.add(product);
     });
   }
 
-  void _updateProduct(int index, CustomImage productUpdate) {
+  void _updateProduct(int index, Product productUpdate) {
     setState(() {
       _products[index] = productUpdate;
     });
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    this._addProduct(new CustomImage('assets/food.jpg', 'Title', 1.0, 'desc'));
+    this._addProduct(new Product('assets/food.jpg', 'Title', 1.0, 'desc'));
     return MaterialApp(
       theme: ThemeData(
 //        brightness: Brightness.dark,

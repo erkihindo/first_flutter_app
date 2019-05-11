@@ -1,4 +1,4 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductCreatePage extends StatefulWidget {
@@ -26,8 +26,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       return;
     }
     _formKey.currentState.save();
-    CustomImage newProduct =
-        new CustomImage('assets/food.jpg', title, price, description);
+    Product newProduct =
+        new Product('assets/food.jpg', title, price, description);
     this.addProduct(newProduct);
   }
 

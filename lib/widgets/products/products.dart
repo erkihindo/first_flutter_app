@@ -1,9 +1,9 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/widgets/products/product_card.dart';
 import 'package:flutter/material.dart';
 
 class Products extends StatelessWidget {
-  final List<CustomImage> _products;
+  final List<Product> _products;
 
   Products(this._products);
   @override

@@ -1,4 +1,4 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/widgets/products/addressTag.dart';
 import 'package:first_flutter_app/widgets/ui_elements/TitleDefault.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:first_flutter_app/pages/productDetails.dart';
 import './price_tag.dart';
 
 class ProductCard extends StatelessWidget {
- final CustomImage product;
+ final Product product;
 
   const ProductCard({this.product});
 

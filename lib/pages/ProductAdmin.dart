@@ -1,4 +1,4 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/pages/ProductCreate.dart';
 import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:first_flutter_app/pages/ProductList.dart';
@@ -9,7 +9,7 @@ class ProductAdmin extends StatelessWidget {
   final Function addProduct;
   final Function deleteProduct;
   final Function updateProduct;
-  final List<CustomImage> products;
+  final List<Product> products;
 
   ProductAdmin(this.addProduct, this.updateProduct, this.deleteProduct, this.products);
 

@@ -1,11 +1,11 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/helpers/EnsureVisible.dart';
 import 'package:flutter/material.dart';
 
 class ProductEditPage extends StatefulWidget {
   final Function addProduct;
   final Function updateProduct;
-  final CustomImage product;
+  final Product product;
   final int productIndex;
 
   const ProductEditPage(
@@ -33,8 +33,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
       return;
     }
     _formKey.currentState.save();
-    CustomImage newProduct =
-        new CustomImage('assets/food.jpg', title, price, description);
+    Product newProduct =
+        new Product('assets/food.jpg', title, price, description);
     if (widget.product == null) {
       widget.addProduct(newProduct);
     } else {

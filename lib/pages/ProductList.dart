@@ -1,9 +1,9 @@
-import 'package:first_flutter_app/domain/image.dart';
+import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductListPage extends StatelessWidget {
-  final List<CustomImage> products;
+  final List<Product> products;
   final Function updateProduct;
   final Function deleteProduct;
 
