@@ -99,7 +99,7 @@ class _AuthPageState extends State<AuthPage> {
       validator: (input) {
         if (!emailRegexp.hasMatch(input)) {
           return "Please enter correct email";
-        };
+        }
       },
       onSaved: (newValue) {
           email = newValue;

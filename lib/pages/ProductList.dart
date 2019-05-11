@@ -43,7 +43,6 @@ class ProductListPage extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return ProductEditPage(
                 product: products[index],
-                updateProduct: this.updateProduct,
                 productIndex: index,
               );
             }));
