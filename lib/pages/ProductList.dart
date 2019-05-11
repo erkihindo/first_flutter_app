@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class ProductListPage extends StatelessWidget {
   final List<CustomImage> products;
   final Function updateProduct;
+  final Function deleteProduct;
 
-  ProductListPage(this.products, this.updateProduct);
+  ProductListPage(this.products, this.updateProduct, this.deleteProduct);
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,11 @@ class ProductListPage extends StatelessWidget {
       itemBuilder: (context, int index) {
         return Dismissible(
           key: Key(products[index].title), // TODO use id instead
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.startToEnd) {
+              this.deleteProduct(index);
+            }
+          },
           background: Container(color: Colors.red, child: Icon(Icons.delete),),
           child: Column(
             children: <Widget>[buildListTile(index, context), Divider()],
