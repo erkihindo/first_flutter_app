@@ -22,7 +22,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-//    this._addProduct(new Product('assets/food.jpg', 'Title', 1.0, 'desc'));
     return ScopedModel<ProductsScopeModel>(
       model: ProductsScopeModel(),
       child: MaterialApp(

@@ -9,6 +9,13 @@ class Products extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ProductsScopeModel>(
       builder: (BuildContext context, Widget child, ProductsScopeModel model) {
+        if (model.products.isEmpty) {
+          model.addProduct(new Product(
+              url: 'assets/food.jpg',
+              title: 'Title',
+              price: 1.0,
+              description: 'desc'));
+        }
         return _buildProductsList(model.products);
       },
     );
@@ -20,7 +27,7 @@ class Products extends StatelessWidget {
     if (products.isNotEmpty) {
       body = ListView.builder(
         itemBuilder: (context, index) => ProductCard(
-              product: products[index],
+              productId: products[index].id,
             ),
         itemCount: products.length,
       );

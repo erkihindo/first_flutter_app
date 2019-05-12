@@ -38,4 +38,11 @@ class ProductsScopeModel extends Model {
 	void selectProduct(int index) {
 		_selectedProductIndex = index;
 	}
+
+	bool toggleProductFavouriteStatus(int indexId) {
+		final bool isCurrentlyFavourite = _products[_selectedProductIndex].isFavourite;
+		_products[_selectedProductIndex].isFavourite = !isCurrentlyFavourite;
+		notifyListeners();
+		return !isCurrentlyFavourite;
+	}
 }
