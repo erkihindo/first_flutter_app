@@ -5,12 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProductEditPage extends StatefulWidget {
-  final Product product;
-  final int productIndex;
-
-  const ProductEditPage(
-      {this.product, this.productIndex});
-
   @override
   State<StatefulWidget> createState() {
     return _ProductEditPageState();
@@ -18,9 +12,6 @@ class ProductEditPage extends StatefulWidget {
 }
 
 class _ProductEditPageState extends State<ProductEditPage> {
-  String title = '';
-  String description = '';
-  double price = 0.0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _titleFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
@@ -30,24 +21,30 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.product == null ? editPage() : editPageWithScaffold();
+    return ScopedModelDescendant<ProductsScopeModel>(builder:
+        (BuildContext context, Widget child, ProductsScopeModel model) {
+      return model.selectedProductIndex != null
+          ? editPageWithScaffold(model.selectedProduct)
+          : editPage(new Product());
+    });
   }
 
-  void submitForm(Function addProduct, Function updateProduct) {
+  void submitForm(
+      Function addProduct, Function updateProduct, Product selectedProduct) {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
-    Product newProduct =
-        new Product('assets/food.jpg', title, price, description);
-    if (widget.product == null) {
-      addProduct(newProduct);
+
+    if (selectedProduct.id == null) {
+      addProduct(selectedProduct);
     } else {
-      updateProduct(widget.productIndex, newProduct);
+      updateProduct(selectedProduct);
     }
+    Navigator.pushReplacementNamed(context, '/products');
   }
 
-  Widget editPage() {
+  Widget editPage(Product selectedProduct) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550 ? 500 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
@@ -69,13 +66,13 @@ class _ProductEditPageState extends State<ProductEditPage> {
                           focusNode: _titleFocusNode,
                           maxLines: 1,
                           decoration: InputDecoration(labelText: 'Title'),
-                          initialValue: widget.product?.title,
+                          initialValue: selectedProduct?.title,
                           validator: (String input) {
                             if (input.trim().length <= 2)
                               return 'Title should be at least 3 characters long';
                           },
                           onSaved: (String newValue) {
-                            title = newValue;
+                              selectedProduct.title = newValue;
                           },
                         )),
                     EnsureVisibleWhenFocused(
@@ -84,13 +81,13 @@ class _ProductEditPageState extends State<ProductEditPage> {
                           focusNode: _descFocusNode,
                           maxLines: 4,
                           decoration: InputDecoration(labelText: 'Description'),
-                          initialValue: widget.product?.description,
+                          initialValue: selectedProduct?.description,
                           validator: (String input) {
                             if (input.trim().length <= 4)
                               return 'Description should be at least 5 characters long';
                           },
                           onSaved: (String newValue) {
-                            description = newValue;
+                              selectedProduct.description = newValue;
                           },
                         )),
                     EnsureVisibleWhenFocused(
@@ -105,36 +102,36 @@ class _ProductEditPageState extends State<ProductEditPage> {
                                     .hasMatch(input))
                               return 'Price is required and should be a number';
                           },
-                          initialValue: widget.product?.price?.toString(),
+                          initialValue: selectedProduct?.price?.toString(),
                           onSaved: (String newValue) {
-                            price = double.parse(newValue);
+                              selectedProduct.price = double.parse(newValue);
                           },
                         )),
                     SizedBox(
                       height: 10.0,
                     ),
-                    buildSubmitButton()
+                    buildSubmitButton(selectedProduct)
                   ],
                 ))));
   }
 
-  Widget buildSubmitButton() {
-    return ScopedModelDescendant<ProductsScopeModel>(
-        builder: (BuildContext context, Widget child, ProductsScopeModel model) {
-            return RaisedButton(
-            color: Theme.of(context).accentColor,
-            child: Text('Create'),
-            onPressed: () => this.submitForm(model.addProduct, model.updateProduct),
-        );
-        }
-    );
+  Widget buildSubmitButton(Product selectedProduct) {
+    return ScopedModelDescendant<ProductsScopeModel>(builder:
+        (BuildContext context, Widget child, ProductsScopeModel model) {
+      return RaisedButton(
+        color: Theme.of(context).accentColor,
+        child: Text('Save'),
+        onPressed: () => this
+            .submitForm(model.addProduct, model.updateProduct, selectedProduct),
+      );
+    });
   }
 
-  Widget editPageWithScaffold() {
+  Widget editPageWithScaffold(Product product) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Edit product"),
         ),
-        body: editPage());
+        body: editPage(product));
   }
 }

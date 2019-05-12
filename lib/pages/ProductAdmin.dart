@@ -1,8 +1,5 @@
-import 'package:first_flutter_app/models/product.dart';
-import 'package:first_flutter_app/pages/ProductCreate.dart';
 import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:first_flutter_app/pages/ProductList.dart';
-import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductAdmin extends StatelessWidget {
@@ -28,7 +25,7 @@ class ProductAdmin extends StatelessWidget {
         ),
         body: TabBarView(children: <Widget>[
           ProductEditPage(),
-          ProductListPage(null, null, null)
+          ProductListPage()
         ]),
       ),
     );
