@@ -1,7 +1,7 @@
 import 'package:first_flutter_app/models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class ProductsScopeModel extends Model {
+mixin ProductsScopeModel on Model {
   List<Product> _products = [];
   int _selectedProductIndex;
   bool isFavouriteFilterOn = false;

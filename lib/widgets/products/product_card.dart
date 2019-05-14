@@ -1,5 +1,6 @@
 import 'package:first_flutter_app/pages/productDetails.dart';
 import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
+import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:first_flutter_app/widgets/products/addressTag.dart';
 import 'package:first_flutter_app/widgets/ui_elements/TitleDefault.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return ScopedModelDescendant<ProductsScopeModel>(
-          builder: (BuildContext context, Widget child, ProductsScopeModel model)
+      return ScopedModelDescendant<MainScopeModel>(
+          builder: (BuildContext context, Widget child, MainScopeModel model)
       {
           this.productsService = model;
           this.productsService.selectProduct(productId);

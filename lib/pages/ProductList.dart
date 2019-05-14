@@ -1,6 +1,7 @@
 import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
+import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -9,8 +10,8 @@ class ProductListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<ProductsScopeModel>(builder:
-        (BuildContext context, Widget child, ProductsScopeModel model) {
+    return ScopedModelDescendant<MainScopeModel>(
+        builder: (BuildContext context, Widget child, MainScopeModel model) {
       this.productsService = model;
       return buildListViewOfAllProducts();
     });
@@ -22,7 +23,6 @@ class ProductListPage extends StatelessWidget {
         return Dismissible(
           key: Key(productsService.products[index].title),
           onDismissed: (DismissDirection direction) {
-
             if (direction == DismissDirection.startToEnd) {
               productsService.deleteProduct(index);
             }
@@ -47,9 +47,9 @@ class ProductListPage extends StatelessWidget {
         ),
         title: Text(productsService.products[index].title),
         subtitle: Text('€${productsService.products[index].price}'),
-        trailing: ScopedModelDescendant<ProductsScopeModel>(
+        trailing: ScopedModelDescendant<MainScopeModel>(
           builder:
-              (BuildContext context, Widget child, ProductsScopeModel model) {
+              (BuildContext context, Widget child, MainScopeModel model) {
             return IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
