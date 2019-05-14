@@ -1,48 +1,62 @@
-
 import 'package:first_flutter_app/models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProductsScopeModel extends Model {
-	List<Product> _products = [];
-	int _selectedProductIndex;
+  List<Product> _products = [];
+  int _selectedProductIndex;
+  bool isFavouriteFilterOn = false;
 
-	int get selectedProductIndex => _selectedProductIndex;
+  int get selectedProductIndex => _selectedProductIndex;
 
-	List<Product> get products {
-		return List.from(_products);
-	}
+  List<Product> get products {
+    return List.from(_products);
+  }
 
-	Product get selectedProduct {
-		return _selectedProductIndex != null ?
-		_products[_selectedProductIndex] :
-		null;
-	}
+  List<Product> get productsByFavourite {
+    if (!isFavouriteFilterOn) return products;
 
-	void addProduct(Product product) {
-		product.id = _products.length;
-		product.url = 'assets/food.jpg';
-		this._products.add(product);
-		_selectedProductIndex = null;
-	}
+    return List.from(_products.where((Product p) => p.isFavourite).toList());
+  }
 
-	void updateProduct(Product productUpdate) {
-		_products[productUpdate.id] = productUpdate;
-		_selectedProductIndex = null;
-	}
+  Product get selectedProduct {
+    return _selectedProductIndex != null
+        ? _products[_selectedProductIndex]
+        : null;
+  }
 
-	void deleteProduct(int selectedProductIndex) {
-		this._products.removeAt(selectedProductIndex);
-		selectedProductIndex = null;
-	}
+  void addProduct(Product product) {
+    product.id = _products.length;
+    product.url = 'assets/food.jpg';
+    this._products.add(product);
+    _selectedProductIndex = null;
+  }
 
-	void selectProduct(int index) {
-		_selectedProductIndex = index;
-	}
+  void updateProduct(Product productUpdate) {
+    _products[productUpdate.id] = productUpdate;
+    _selectedProductIndex = null;
+  }
 
-	bool toggleProductFavouriteStatus(int indexId) {
-		final bool isCurrentlyFavourite = _products[_selectedProductIndex].isFavourite;
-		_products[_selectedProductIndex].isFavourite = !isCurrentlyFavourite;
-		notifyListeners();
-		return !isCurrentlyFavourite;
-	}
+  void deleteProduct(int selectedProductIndex) {
+    this._products.removeAt(selectedProductIndex);
+    selectedProductIndex = null;
+  }
+
+  void selectProduct(int index) {
+    _selectedProductIndex = index;
+  }
+
+  bool toggleProductFavouriteStatus(int indexId) {
+    final bool isCurrentlyFavourite =
+        _products[_selectedProductIndex].isFavourite;
+    _products[_selectedProductIndex].isFavourite = !isCurrentlyFavourite;
+    notifyListeners();
+    return !isCurrentlyFavourite;
+  }
+
+  bool toggleFavouriteMode() {
+    this.isFavouriteFilterOn = !this.isFavouriteFilterOn;
+    notifyListeners();
+    _selectedProductIndex = null;
+    return this.isFavouriteFilterOn;
+  }
 }

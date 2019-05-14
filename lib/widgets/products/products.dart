@@ -16,7 +16,8 @@ class Products extends StatelessWidget {
               price: 1.0,
               description: 'desc'));
         }
-        return _buildProductsList(model.products);
+
+        return _buildProductsList(model.productsByFavourite);
       },
     );
   }
