@@ -31,7 +31,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   }
 
   void submitForm(
-      Function addProduct, Function updateProduct, Product selectedProduct) {
+      Function addProduct, Function updateProduct, Product selectedProduct, Function selectProduct) {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -42,7 +42,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     } else {
       updateProduct(selectedProduct);
     }
-    Navigator.pushReplacementNamed(context, '/products');
+    Navigator.pushReplacementNamed(context, '/products').then((_) => selectProduct(null));
   }
 
   Widget editPage(Product selectedProduct) {
@@ -123,7 +123,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
         color: Theme.of(context).accentColor,
         child: Text('Save'),
         onPressed: () => this
-            .submitForm(model.addProduct, model.updateProduct, selectedProduct),
+            .submitForm(model.addProduct, model.updateProduct, selectedProduct, model.selectProduct),
       );
     });
   }

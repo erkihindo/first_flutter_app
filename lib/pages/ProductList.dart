@@ -57,7 +57,9 @@ class ProductListPage extends StatelessWidget {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
                     return ProductEditPage();
-                  }));
+                  })).then((_) {
+                  	productsService.selectProduct(null);
+                  });
                 });
           },
         ));

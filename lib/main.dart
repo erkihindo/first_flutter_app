@@ -1,5 +1,6 @@
 import 'package:first_flutter_app/pages/ProductAdmin.dart';
 import 'package:first_flutter_app/pages/ProductsPage.dart';
+import 'package:first_flutter_app/pages/auth.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.blue),
 //      home: AuthPage(),
         routes: {
-          '/': (context) => ProductsPage(),
+          '/': (context) => AuthPage(),
           '/products': (context) => ProductsPage(),
           '/admin': (context) => ProductAdmin()
         },

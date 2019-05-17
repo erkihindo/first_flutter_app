@@ -1,54 +1,43 @@
 import 'package:first_flutter_app/models/product.dart';
+import 'package:first_flutter_app/scoped_models/UserAndProductsScopedModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-mixin ProductsScopeModel on Model {
-  List<Product> _products = [];
-  int _selectedProductIndex;
+mixin ProductsScopeModel on UserAndProductsScopedModel {
   bool isFavouriteFilterOn = false;
-
-  int get selectedProductIndex => _selectedProductIndex;
-
-  List<Product> get products {
-    return List.from(_products);
-  }
 
   List<Product> get productsByFavourite {
     if (!isFavouriteFilterOn) return products;
 
-    return List.from(_products.where((Product p) => p.isFavourite).toList());
+    return List.from(products.where((Product p) => p.isFavourite).toList());
   }
 
   Product get selectedProduct {
-    return _selectedProductIndex != null
-        ? _products[_selectedProductIndex]
+    return selectedProductIndex != null
+        ? products[selectedProductIndex]
         : null;
   }
 
-  void addProduct(Product product) {
-    product.id = _products.length;
-    product.url = 'assets/food.jpg';
-    this._products.add(product);
-    _selectedProductIndex = null;
-  }
-
   void updateProduct(Product productUpdate) {
-    _products[productUpdate.id] = productUpdate;
-    _selectedProductIndex = null;
+    products[productUpdate.id] = productUpdate;
+    notifyListeners();
   }
 
   void deleteProduct(int selectedProductIndex) {
-    this._products.removeAt(selectedProductIndex);
+    this.products.removeAt(selectedProductIndex);
     selectedProductIndex = null;
   }
 
   void selectProduct(int index) {
-    _selectedProductIndex = index;
+    selectedProductIndex = index;
+    if(selectedProductIndex != null) {
+    	notifyListeners();
+    }
   }
 
   bool toggleProductFavouriteStatus(int indexId) {
     final bool isCurrentlyFavourite =
-        _products[_selectedProductIndex].isFavourite;
-    _products[_selectedProductIndex].isFavourite = !isCurrentlyFavourite;
+        products[selectedProductIndex].isFavourite;
+    products[selectedProductIndex].isFavourite = !isCurrentlyFavourite;
     notifyListeners();
     return !isCurrentlyFavourite;
   }
@@ -56,7 +45,7 @@ mixin ProductsScopeModel on Model {
   bool toggleFavouriteMode() {
     this.isFavouriteFilterOn = !this.isFavouriteFilterOn;
     notifyListeners();
-    _selectedProductIndex = null;
+    selectedProductIndex = null;
     return this.isFavouriteFilterOn;
   }
 }
