@@ -29,30 +29,6 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
 		notifyListeners();
 	}
 
-	findAllProducts() {
-		http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
-			.then((http.Response response) {
-			dynamic productsFromServer = json.decode(response.body);
-			List<Product> fetchedProducts = [];
-			productsFromServer.forEach((String key, dynamic data) {
-				Product productDto = new Product(
-					id: key,
-					title: data["title"],
-					description: data["description"],
-					url: data["url"],
-					price: data["price"],
-					userEmail: data["userEmail"],
-					userId: data["userId"],
-					isFavourite: data["isFavourite"],
-				);
-				fetchedProducts.add(productDto);
-			});
-			products = fetchedProducts;
-			print(products);
-			notifyListeners();
-		});
-	}
-
 	void selectProduct(int index) {
 		selectedProductIndex = index;
 		if (selectedProductIndex != null) {

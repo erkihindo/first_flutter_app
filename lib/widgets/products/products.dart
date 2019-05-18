@@ -5,20 +5,18 @@ import 'package:first_flutter_app/widgets/products/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Products extends StatelessWidget {
+class ProductsOrSpinner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainScopeModel>(
       builder: (BuildContext context, Widget child, MainScopeModel model) {
-//        if (model.products.isEmpty) { TODO adds product on startup
-//          model.addProduct(new Product(
-//              url: 'assets/food.jpg',
-//              title: 'Title',
-//              price: 1.0,
-//              description: 'desc'));
-//        }
-
-        return _buildProductsList(model.productsByFavourite);
+		Widget content = Center(child: Text("No widgets found"),);
+		if (model.isLoading) {
+			content = Center(child: CircularProgressIndicator());
+		} else if (model.products.length > 0) {
+			content = _buildProductsList(model.productsByFavourite);
+		}
+        return content;
       },
     );
   }
