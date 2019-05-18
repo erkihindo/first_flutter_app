@@ -1,6 +1,8 @@
 import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/scoped_models/UserAndProductsScopedModel.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 mixin ProductsScopeModel on UserAndProductsScopedModel {
   bool isFavouriteFilterOn = false;
@@ -18,13 +20,21 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
   }
 
   void updateProduct(Product productUpdate) {
-    products[productUpdate.id] = productUpdate;
+    products[selectedProductIndex] = productUpdate;
     notifyListeners();
   }
 
   void deleteProduct(int selectedProductIndex) {
     this.products.removeAt(selectedProductIndex);
-    selectedProductIndex = null;
+    notifyListeners();
+  }
+
+  findAllProducts() {
+	  http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
+		  .then((http.Response response) {
+		  dynamic products = json.decode(response.body);
+		  print(products);
+	  });
   }
 
   void selectProduct(int index) {

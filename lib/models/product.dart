@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Product {
-  num id;
+  String id;
   String url;
   String title;
   double price;

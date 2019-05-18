@@ -20,8 +20,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+  	final MainScopeModel model = MainScopeModel();
     return ScopedModel<MainScopeModel>(
-      model: MainScopeModel(),
+      model: model,
       child: MaterialApp(
         theme: ThemeData(
 //        brightness: Brightness.dark,
@@ -30,7 +31,7 @@ class _MyAppState extends State<MyApp> {
 //      home: AuthPage(),
         routes: {
           '/': (context) => AuthPage(),
-          '/products': (context) => ProductsPage(),
+          '/products': (context) => ProductsPage(mainScopeModel: model),
           '/admin': (context) => ProductAdmin()
         },
       ),
