@@ -20,4 +20,16 @@ class Product {
     this.userEmail,
     this.userId,
   });
+
+  toJson() {
+  	return {
+        "url": url,
+        "title": title,
+        "price": price,
+        "description": description,
+        "isFavourite": isFavourite,
+        "userEmail": userEmail,
+        "userId": userId,
+    };
+  }
 }
