@@ -7,12 +7,12 @@ import 'dart:convert';
 import 'dart:async';
 
 mixin UserAndProductsScopedModel on Model {
-	List<Product> _products = [];
+	List<Product> products = [];
 	User authenticatedUser;
 	int selectedProductIndex;
 
-	List<Product> get products {
-		return List.from(_products);
+	List<Product> get allProducts {
+		return List.from(products);
 	}
 
 	Future addProduct(Product product) async {
@@ -25,6 +25,6 @@ mixin UserAndProductsScopedModel on Model {
 		print(response.body);
 		dynamic nameId = (json.decode(response.body));
 		print("Done");
-		this._products.add(product);
+		this.products.add(product);
 	}
 }

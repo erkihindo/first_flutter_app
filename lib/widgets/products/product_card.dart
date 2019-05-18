@@ -29,7 +29,7 @@ class ProductCard extends StatelessWidget {
     return Card(
     child: Column(
       children: <Widget>[
-        Image.asset('assets/food.jpg'),
+        Image.network(productsService.selectedProduct.url),
         Padding(
             padding: EdgeInsets.all(10.0),
             child: Row(

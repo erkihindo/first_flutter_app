@@ -18,7 +18,7 @@ class ProductDetails extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(_product.url),
+              Image.network(_product.url),
               SizedBox(height: 10.0,),
               AddressTag(address: "Somewhere TLN",),
               Container(

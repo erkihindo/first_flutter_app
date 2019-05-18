@@ -5,57 +5,73 @@ import 'dart:convert';
 import 'dart:async';
 
 mixin ProductsScopeModel on UserAndProductsScopedModel {
-  bool isFavouriteFilterOn = false;
+	bool isFavouriteFilterOn = false;
 
-  List<Product> get productsByFavourite {
-    if (!isFavouriteFilterOn) return products;
+	List<Product> get productsByFavourite {
+		if (!isFavouriteFilterOn) return products;
 
-    return List.from(products.where((Product p) => p.isFavourite).toList());
-  }
+		return List.from(products.where((Product p) => p.isFavourite).toList());
+	}
 
-  Product get selectedProduct {
-    return selectedProductIndex != null
-        ? products[selectedProductIndex]
-        : null;
-  }
+	Product get selectedProduct {
+		return selectedProductIndex != null
+			? products[selectedProductIndex]
+			: null;
+	}
 
-  void updateProduct(Product productUpdate) {
-    products[selectedProductIndex] = productUpdate;
-    notifyListeners();
-  }
+	void updateProduct(Product productUpdate) {
+		products[selectedProductIndex] = productUpdate;
+		notifyListeners();
+	}
 
-  void deleteProduct(int selectedProductIndex) {
-    this.products.removeAt(selectedProductIndex);
-    notifyListeners();
-  }
+	void deleteProduct(int selectedProductIndex) {
+		this.products.removeAt(selectedProductIndex);
+		notifyListeners();
+	}
 
-  findAllProducts() {
-	  http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
-		  .then((http.Response response) {
-		  dynamic products = json.decode(response.body);
-		  print(products);
-	  });
-  }
+	findAllProducts() {
+		http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
+			.then((http.Response response) {
+			dynamic productsFromServer = json.decode(response.body);
+			List<Product> fetchedProducts = [];
+			productsFromServer.forEach((String key, dynamic data) {
+				Product productDto = new Product(
+					id: key,
+					title: data["title"],
+					description: data["description"],
+					url: data["url"],
+					price: data["price"],
+					userEmail: data["userEmail"],
+					userId: data["userId"],
+					isFavourite: data["isFavourite"],
+				);
+				fetchedProducts.add(productDto);
+			});
+			products = fetchedProducts;
+			print(products);
+			notifyListeners();
+		});
+	}
 
-  void selectProduct(int index) {
-    selectedProductIndex = index;
-    if(selectedProductIndex != null) {
-    	notifyListeners();
-    }
-  }
+	void selectProduct(int index) {
+		selectedProductIndex = index;
+		if (selectedProductIndex != null) {
+			notifyListeners();
+		}
+	}
 
-  bool toggleProductFavouriteStatus(int indexId) {
-    final bool isCurrentlyFavourite =
-        products[selectedProductIndex].isFavourite;
-    products[selectedProductIndex].isFavourite = !isCurrentlyFavourite;
-    notifyListeners();
-    return !isCurrentlyFavourite;
-  }
+	bool toggleProductFavouriteStatus(int indexId) {
+		final bool isCurrentlyFavourite =
+			products[selectedProductIndex].isFavourite;
+		products[selectedProductIndex].isFavourite = !isCurrentlyFavourite;
+		notifyListeners();
+		return !isCurrentlyFavourite;
+	}
 
-  bool toggleFavouriteMode() {
-    this.isFavouriteFilterOn = !this.isFavouriteFilterOn;
-    notifyListeners();
-    selectedProductIndex = null;
-    return this.isFavouriteFilterOn;
-  }
+	bool toggleFavouriteMode() {
+		this.isFavouriteFilterOn = !this.isFavouriteFilterOn;
+		notifyListeners();
+		selectedProductIndex = null;
+		return this.isFavouriteFilterOn;
+	}
 }
