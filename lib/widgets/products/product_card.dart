@@ -20,7 +20,6 @@ class ProductCard extends StatelessWidget {
           builder: (BuildContext context, Widget child, MainScopeModel model)
       {
           this.productsService = model;
-          this.productsService.selectProduct(productId);
           return buildCard(context);
       });
   }
@@ -29,20 +28,20 @@ class ProductCard extends StatelessWidget {
     return Card(
     child: Column(
       children: <Widget>[
-        Image.network(productsService.selectedProduct.url),
+        Image.network(productsService.getProduct(productId).url),
         Padding(
             padding: EdgeInsets.all(10.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  TitleDefault(title: productsService.selectedProduct.title,),
+                  TitleDefault(title: productsService.getProduct(productId).title,),
                   SizedBox(
                     width: 10.0,
                   ),
-                  PriceTag(price:  productsService.selectedProduct.price.toString(),)
+                  PriceTag(price: productsService.getProduct(productId).price.toString(),)
                 ])),
         AddressTag(address: "Somewhere TLN",),
-        Text(productsService.selectedProduct.userEmail),
+        Text(productsService.getProduct(productId).userEmail),
         ButtonBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -53,7 +52,7 @@ class ProductCard extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ProductDetails( productsService.selectedProduct)))
+                          ProductDetails( productsService.getProduct(productId))))
                   .then((bool value) {}),
             ),
             IconButton(
@@ -71,7 +70,7 @@ class ProductCard extends StatelessWidget {
   }
 
   IconData getFilledOrUnfilledFavIcon() {
-      return productsService.selectedProduct.isFavourite ?
+      return productsService.getProduct(productId).isFavourite ?
           Icons.favorite :
           Icons.favorite_border;
   }

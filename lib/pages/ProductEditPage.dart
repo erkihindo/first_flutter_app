@@ -38,11 +38,12 @@ class _ProductEditPageState extends State<ProductEditPage> {
     _formKey.currentState.save();
 
     if (selectedProduct.id == null) {
-      addProduct(selectedProduct);
+      addProduct(selectedProduct).then((_) => {
+        Navigator.pushReplacementNamed(context, '/products').then((_) => selectProduct(null))
+      });
     } else {
       updateProduct(selectedProduct);
     }
-    Navigator.pushReplacementNamed(context, '/products').then((_) => selectProduct(null));
   }
 
   Widget editPage(Product selectedProduct) {
@@ -119,7 +120,9 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget buildSubmitButton(Product selectedProduct) {
     return ScopedModelDescendant<MainScopeModel>(builder:
         (BuildContext context, Widget child, MainScopeModel model) {
-      return RaisedButton(
+      return model.isLoading ?
+      Center(child: CircularProgressIndicator()) :
+      RaisedButton(
         color: Theme.of(context).accentColor,
         child: Text('Save'),
         onPressed: () => this

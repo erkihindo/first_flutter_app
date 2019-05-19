@@ -15,33 +15,30 @@ mixin UserAndProductsScopedModel on Model {
 		return List.from(products);
 	}
 
-	Future addProduct(Product product) async {
-		isLoading = true;
+	Future addProduct(Product product) {
+		startSpinner();
 		product.userEmail = authenticatedUser.email;
 		product.userId = authenticatedUser.id;
 		product.url =
 		'https://www.france-export-fv.com/WebRoot/Orange/Shops/6449c484-4b17-11e1-a012-000d609a287c/5448/A3EA/0B6A/3BD0/1009/0A0C/05EA/5DDA/Chocolat.jpg';
-		http.Response response = await http.post('https://first-flutter-app-9a199.firebaseio.com/products.json',
+		return http.post('https://first-flutter-app-9a199.firebaseio.com/products.json',
 			body: json.encode(product.toJson())
-		);
-		print(response.body);
-		dynamic nameId = (json.decode(response.body)["name"]);
-		product.id = nameId;
-		print("Done");
-		this.products.add(product);
-		this.isLoading = false;
-		notifyListeners();
+		).then((http.Response response) {
+			dynamic nameId = (json.decode(response.body)["name"]);
+			product.id = nameId;
+			this.products.add(product);
+			stopSpinner();
+		});
 	}
 
 	findAllProducts() {
-		isLoading = true;
+		startSpinner();
 		http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
 			.then((http.Response response) {
 			dynamic productsFromServer = json.decode(response.body);
 			mapServerProductsToProductsDto(productsFromServer);
 			print(products);
-			isLoading = false;
-			notifyListeners();
+			stopSpinner();
 		});
 	}
 
@@ -62,6 +59,16 @@ mixin UserAndProductsScopedModel on Model {
 			fetchedProducts.add(productDto);
 		});
 		products = fetchedProducts;
+	}
+
+	void stopSpinner() {
+		this.isLoading = false;
+		notifyListeners();
+	}
+
+	void startSpinner() {
+		isLoading = true;
+		notifyListeners();
 	}
 }
 

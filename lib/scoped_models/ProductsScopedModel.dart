@@ -29,6 +29,10 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
 		notifyListeners();
 	}
 
+	Product getProduct(int index) {
+		return this.products[index];
+	}
+
 	void selectProduct(int index) {
 		selectedProductIndex = index;
 		if (selectedProductIndex != null) {
