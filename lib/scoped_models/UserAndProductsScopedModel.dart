@@ -15,6 +15,16 @@ mixin UserAndProductsScopedModel on Model {
 		return List.from(products);
 	}
 
+	Future updateProduct(Product productUpdate) {
+		startSpinner();
+		products[selectedProductIndex] = productUpdate;
+		return http.put('https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json',
+			body: json.encode(productUpdate.toJson())
+		).then((http.Response response) {
+			stopSpinner();
+		});
+	}
+
 	Future addProduct(Product product) {
 		startSpinner();
 		product.userEmail = authenticatedUser.email;

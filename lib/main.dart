@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context) => AuthPage(),
           '/products': (context) => ProductsPage(mainScopeModel: model),
-          '/admin': (context) => ProductAdmin()
+          '/admin': (context) => ProductAdminPage(model)
         },
       ),
     );

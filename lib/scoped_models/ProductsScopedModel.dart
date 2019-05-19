@@ -19,11 +19,6 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
 			: null;
 	}
 
-	void updateProduct(Product productUpdate) {
-		products[selectedProductIndex] = productUpdate;
-		notifyListeners();
-	}
-
 	void deleteProduct(int selectedProductIndex) {
 		this.products.removeAt(selectedProductIndex);
 		notifyListeners();
