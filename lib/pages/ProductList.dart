@@ -8,6 +8,7 @@ class ProductListPage extends StatefulWidget {
 	final MainScopeModel model;
 
 	const ProductListPage(this.model);
+
 	@override
 	State<StatefulWidget> createState() {
 		return ProductListPageState();
@@ -36,9 +37,7 @@ class ProductListPageState extends State<ProductListPage> {
 		return ListView.builder(
 			itemBuilder: (context, int index) {
 				return Dismissible(
-					key: Key(productsService
-						.getProduct(index)
-						.title),
+					key: Key(productsService.getProduct(index).title),
 					onDismissed: (DismissDirection direction) {
 						if (direction == DismissDirection.startToEnd) {
 							productsService.deleteProduct(index);

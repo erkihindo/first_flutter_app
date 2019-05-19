@@ -10,7 +10,7 @@ class ProductsOrSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainScopeModel>(
       builder: (BuildContext context, Widget child, MainScopeModel model) {
-		Widget content = Center(child: Text("No widgets found"),);
+		Widget content = Center(child: Text("No products yet"),);
 		if (model.isLoading) {
 			content = Center(child: CircularProgressIndicator());
 		} else if (model.products.length > 0) {

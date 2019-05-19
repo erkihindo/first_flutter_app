@@ -11,10 +11,6 @@ mixin UserAndProductsScopedModel on Model {
 	int selectedProductIndex;
 	bool isLoading = false;
 
-	List<Product> get allProducts {
-		return List.from(products);
-	}
-
 	Future updateProduct(Product productUpdate) {
 		startSpinner();
 		products[selectedProductIndex] = productUpdate;
@@ -38,6 +34,17 @@ mixin UserAndProductsScopedModel on Model {
 			product.id = nameId;
 			this.products.add(product);
 			stopSpinner();
+		});
+	}
+
+	void deleteProduct(int index) {
+		this.startSpinner();
+		this.selectedProductIndex = null;
+		Product product = this.products[index];
+		this.products.removeAt(index);
+		http.delete('https://first-flutter-app-9a199.firebaseio.com/products/${product.id}.json')
+			.then((http.Response response) {
+			this.stopSpinner();
 		});
 	}
 

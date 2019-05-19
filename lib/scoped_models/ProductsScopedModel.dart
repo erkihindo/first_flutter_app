@@ -19,11 +19,6 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
 			: null;
 	}
 
-	void deleteProduct(int selectedProductIndex) {
-		this.products.removeAt(selectedProductIndex);
-		notifyListeners();
-	}
-
 	Product getProduct(int index) {
 		return this.products[index];
 	}
