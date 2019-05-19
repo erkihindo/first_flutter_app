@@ -15,25 +15,27 @@ mixin ProductsScopeModel on UserAndProductsScopedModel {
 
 	Product get selectedProduct {
 		return selectedProductIndex != null
-			? products[selectedProductIndex]
-			: null;
+			? products.firstWhere((p) {
+			return p.id == selectedProductIndex;
+		}) : null;
 	}
 
 	Product getProduct(int index) {
 		return this.products[index];
 	}
 
-	void selectProduct(int index) {
-		selectedProductIndex = index;
+	void selectProduct(String productId) {
+		selectedProductIndex = productId;
 		if (selectedProductIndex != null) {
 			notifyListeners();
 		}
 	}
 
-	bool toggleProductFavouriteStatus(int indexId) {
-		final bool isCurrentlyFavourite =
-			products[selectedProductIndex].isFavourite;
-		products[selectedProductIndex].isFavourite = !isCurrentlyFavourite;
+	bool toggleProductFavouriteStatus(Product product) {
+		final bool isCurrentlyFavourite = product.isFavourite;
+		product.isFavourite = !isCurrentlyFavourite;
+		http.put('https://first-flutter-app-9a199.firebaseio.com/products/${product.id}.json',
+			body: json.encode(product.toJson()));
 		notifyListeners();
 		return !isCurrentlyFavourite;
 	}

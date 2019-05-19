@@ -6,32 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProductsOrSpinner extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainScopeModel>(
-      builder: (BuildContext context, Widget child, MainScopeModel model) {
-		Widget content = Center(child: Text("No products yet"),);
-		if (model.isLoading) {
-			content = Center(child: CircularProgressIndicator());
-		} else if (model.products.length > 0) {
-			content = _buildProductsList(model.productsByFavourite);
+	@override
+	Widget build(BuildContext context) {
+		return ScopedModelDescendant<MainScopeModel>(
+			builder: (BuildContext context, Widget child, MainScopeModel model) {
+				Widget content = Center(child: CircularProgressIndicator(),);
+				if (!model.isLoading) {
+					content = _buildProductsList(model.productsByFavourite);
+				}
+				return RefreshIndicator(child: content,
+					onRefresh: model.findAllProducts,
+				);
+			},
+		);
+	}
+
+	Widget _buildProductsList(List<Product> products) {
+		Widget body = Center(child: Text("No products yet"));
+
+		if (products.isNotEmpty) {
+			body = ListView.builder(
+				itemBuilder: (context, index) =>
+					ProductCard(
+						product: products[index],
+					),
+				itemCount: products.length,
+			);
 		}
-        return content;
-      },
-    );
-  }
-
-  Widget _buildProductsList(List<Product> products) {
-    Widget body = Center(child: Text("No products yet"));
-
-    if (products.isNotEmpty) {
-      body = ListView.builder(
-        itemBuilder: (context, index) => ProductCard(
-              productId: index,
-            ),
-        itemCount: products.length,
-      );
-    }
-    return body;
-  }
+		return body;
+	}
 }

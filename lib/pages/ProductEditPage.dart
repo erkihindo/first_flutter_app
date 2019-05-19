@@ -37,9 +37,24 @@ class _ProductEditPageState extends State<ProductEditPage> {
 		_formKey.currentState.save();
 
 		if (selectedProduct.id == null) {
-			model.addProduct(selectedProduct).then((_) =>
-			{
-			Navigator.pushReplacementNamed(context, '/products').then((_) => model.selectProduct(null))
+			model.addProduct(selectedProduct).then((bool isSuccessful) {
+				if (isSuccessful) {
+					Navigator.pushReplacementNamed(context, '/products').then((_) => model.selectProduct(null));
+				} else {
+					showDialog(
+						context: context,
+						builder: (BuildContext context) {
+							return AlertDialog(
+								title: Text("Something went wrong"),
+								content: Text("Please try again"),
+								actions: <Widget>[
+									FlatButton(
+										child: Text("Okay"), onPressed: () => Navigator.of(context).pop(),
+									)
+								],);
+						},
+					);
+				}
 			});
 		} else {
 			model.updateProduct(selectedProduct).then((_) =>

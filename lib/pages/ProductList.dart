@@ -69,7 +69,7 @@ class ProductListPageState extends State<ProductListPage> {
 					return IconButton(
 						icon: Icon(Icons.edit),
 						onPressed: () {
-							model.selectProduct(index);
+							model.selectProduct(productsService.products[index].id);
 							Navigator.of(context)
 								.push(MaterialPageRoute(builder: (context) {
 								return ProductEditPage();

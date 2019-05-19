@@ -8,12 +8,11 @@ import 'dart:async';
 mixin UserAndProductsScopedModel on Model {
 	List<Product> products = [];
 	User authenticatedUser;
-	int selectedProductIndex;
+	String selectedProductIndex;
 	bool isLoading = false;
 
 	Future updateProduct(Product productUpdate) {
 		startSpinner();
-		products[selectedProductIndex] = productUpdate;
 		return http.put('https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json',
 			body: json.encode(productUpdate.toJson())
 		).then((http.Response response) {
@@ -21,7 +20,7 @@ mixin UserAndProductsScopedModel on Model {
 		});
 	}
 
-	Future addProduct(Product product) {
+	Future<bool> addProduct(Product product) {
 		startSpinner();
 		product.userEmail = authenticatedUser.email;
 		product.userId = authenticatedUser.id;
@@ -30,10 +29,15 @@ mixin UserAndProductsScopedModel on Model {
 		return http.post('https://first-flutter-app-9a199.firebaseio.com/products.json',
 			body: json.encode(product.toJson())
 		).then((http.Response response) {
+			stopSpinner();
+			if (response.statusCode != 200 && response.statusCode != 201) {
+				notifyListeners();
+				return false;
+			}
 			dynamic nameId = (json.decode(response.body)["name"]);
 			product.id = nameId;
 			this.products.add(product);
-			stopSpinner();
+			return true;
 		});
 	}
 
@@ -48,9 +52,9 @@ mixin UserAndProductsScopedModel on Model {
 		});
 	}
 
-	findAllProducts() {
+	Future findAllProducts() {
 		startSpinner();
-		http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
+		return http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
 			.then((http.Response response) {
 			dynamic productsFromServer = json.decode(response.body);
 			mapServerProductsToProductsDto(productsFromServer);
