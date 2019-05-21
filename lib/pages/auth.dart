@@ -70,19 +70,44 @@ class _AuthPageState extends State<AuthPage> {
 						.of(context)
 						.accentColor,
 					child: Text('Create'),
-					onPressed: () => _submitForm(model.login),
+					onPressed: () => _submitForm(model),
 				);
 			});
 	}
 
-	void _submitForm(Function login) {
+	void _submitForm(MainScopeModel model) {
 		if (!_formKey.currentState.validate()) {
 			return;
 		}
 		_formKey.currentState.save();
-		print("Submitted form");
-		login(this.email, this.password);
-		Navigator.pushReplacementNamed(context, "/products");
+		if (authMode == AuthMode.LOGIN) {
+			model.login(this.email, this.password);
+			Navigator.pushReplacementNamed(context, "/products");
+		} else {
+			model.signUp(email, password).then((Map result) {
+				if (result['success']) {
+					Navigator.pushReplacementNamed(context, '/products');
+				} else {
+					showDialog(
+						context: context,
+						builder: (BuildContext context) {
+							return AlertDialog(
+								title: Text('An Error Occurred!'),
+								content: Text(result['message']),
+								actions: <Widget>[
+									FlatButton(
+										child: Text('Okay'),
+										onPressed: () {
+											Navigator.of(context).pop();
+										},
+									)
+								],
+							);
+						});
+				}
+			});
+		}
+
 	}
 
 	DecorationImage _buildBackgroundImage() {
