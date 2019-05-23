@@ -13,7 +13,7 @@ mixin UserAndProductsScopedModel on Model {
 
 	Future updateProduct(Product productUpdate) {
 		startSpinner();
-		return http.put('https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json',
+		return http.put('https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json?auth=${this.authenticatedUser.token}',
 			body: json.encode(productUpdate.toJson())
 		).then((http.Response response) {
 			stopSpinner();
@@ -25,7 +25,7 @@ mixin UserAndProductsScopedModel on Model {
 		this.selectedProductIndex = null;
 		Product product = this.products[index];
 		this.products.removeAt(index);
-		http.delete('https://first-flutter-app-9a199.firebaseio.com/products/${product.id}.json')
+		http.delete('https://first-flutter-app-9a199.firebaseio.com/products/${product.id}.json?auth=${this.authenticatedUser.token}')
 			.then((http.Response response) {
 			this.stopSpinner();
 		});
@@ -33,7 +33,7 @@ mixin UserAndProductsScopedModel on Model {
 
 	Future findAllProducts() {
 		startSpinner();
-		return http.get('https://first-flutter-app-9a199.firebaseio.com/products.json')
+		return http.get('https://first-flutter-app-9a199.firebaseio.com/products.json?auth=${this.authenticatedUser.token}')
 			.then((http.Response response) {
 			dynamic productsFromServer = json.decode(response.body);
 			mapServerProductsToProductsDto(productsFromServer);

@@ -21,12 +21,25 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 			body: json.encode(authData));
 
 		final Map<String, dynamic> responseData = json.decode(response.body);
-		bool wasSuccesful = responseData.containsKey("idToken");
-		var message = wasSuccesful ? 'Auth succeeded' : responseData['error']['message'];
+		bool wasSuccessful = responseData.containsKey("idToken");
+		var message = wasSuccessful ? 'Auth succeeded' : responseData['error']['message'];
 		this.stopSpinner();
-		return {'success': wasSuccesful, 'message': message};
+		createUserIfSuccessful(wasSuccessful, responseData);
+		return {'success': wasSuccessful, 'message': message};
 
 	}
+
+	void createUserIfSuccessful(
+		bool wasSuccessful,
+		Map<String, dynamic> responseData) {
+		if (wasSuccessful) {
+			authenticatedUser = new User(
+				id: responseData['localId'],
+				email: responseData['email'],
+				token: responseData['idToken']);
+		}
+	}
+
 
 	Future<Map<String, dynamic>> signUp(String email, String password) async {
 		this.startSpinner();
@@ -45,4 +58,5 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 		this.stopSpinner();
 		return {'success': wasSuccesful, 'message': message};
 	}
+
 }

@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class User {
 	String id;
 	String email;
-	String password;
+	String token;
 
-	User({this.id, this.email, this.password});
+	User({this.id, this.email, @required this.token});
 }
