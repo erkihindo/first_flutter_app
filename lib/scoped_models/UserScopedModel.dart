@@ -5,14 +5,31 @@ import 'package:first_flutter_app/scoped_models/UserAndProductsScopedModel.dart'
 import 'package:http/http.dart' as http;
 
 mixin UserScopeModel on UserAndProductsScopedModel {
+	static String apiKey = 'AIzaSyDK9oj7dxbH_Yr4Bym_HUufdnmwlkGKkI4';
+	final String signUpUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + apiKey;
+	final String signInUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + apiKey;
 
-	final String signUpUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDK9oj7dxbH_Yr4Bym_HUufdnmwlkGKkI4';
+	Future<Map<String, dynamic>> login(String email, String password) async {
+		Map<String, dynamic> authData = {
+			"email": email,
+			"password": password,
+			"returnSecureToken": true
+		};
 
-	void login(String email, String password) {
-		authenticatedUser = new User(id: 'ssss', email: email, password: password);
+		http.Response response = await http.post(this.signInUrl,
+			headers: {'Content-Type': 'application/json'},
+			body: json.encode(authData));
+
+		final Map<String, dynamic> responseData = json.decode(response.body);
+		bool wasSuccesful = responseData.containsKey("idToken");
+		var message = wasSuccesful ? 'Auth succeeded' : responseData['error']['message'];
+		this.stopSpinner();
+		return {'success': wasSuccesful, 'message': message};
+
 	}
 
 	Future<Map<String, dynamic>> signUp(String email, String password) async {
+		this.startSpinner();
 		Map<String, dynamic> authData = {
 			"email": email,
 			"password": password,
@@ -25,6 +42,7 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 		final Map<String, dynamic> responseData = json.decode(response.body);
 		bool wasSuccesful = responseData.containsKey("idToken");
 		var message = wasSuccesful ? 'Auth succeeded' : responseData['error']['message'];
+		this.stopSpinner();
 		return {'success': wasSuccesful, 'message': message};
 	}
 }

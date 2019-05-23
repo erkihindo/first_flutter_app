@@ -65,47 +65,47 @@ class _AuthPageState extends State<AuthPage> {
 	Widget buildLoginButton() {
 		return ScopedModelDescendant<MainScopeModel>(
 			builder: (BuildContext context, Widget child, MainScopeModel model) {
-				return RaisedButton(
-					color: Theme
-						.of(context)
-						.accentColor,
-					child: Text('Create'),
+				return model.isLoading ?
+				CircularProgressIndicator():
+				RaisedButton(
+					color: Colors.white,
+					child: Text(this.authMode == AuthMode.LOGIN ? 'Login': 'Sign up'),
 					onPressed: () => _submitForm(model),
 				);
 			});
 	}
 
-	void _submitForm(MainScopeModel model) {
+	void _submitForm(MainScopeModel model) async {
 		if (!_formKey.currentState.validate()) {
 			return;
 		}
 		_formKey.currentState.save();
+		Map result;
 		if (authMode == AuthMode.LOGIN) {
-			model.login(this.email, this.password);
-			Navigator.pushReplacementNamed(context, "/products");
+			result = await model.login(this.email, this.password);
 		} else {
-			model.signUp(email, password).then((Map result) {
-				if (result['success']) {
-					Navigator.pushReplacementNamed(context, '/products');
-				} else {
-					showDialog(
-						context: context,
-						builder: (BuildContext context) {
-							return AlertDialog(
-								title: Text('An Error Occurred!'),
-								content: Text(result['message']),
-								actions: <Widget>[
-									FlatButton(
-										child: Text('Okay'),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									)
-								],
-							);
-						});
-				}
-			});
+			result = await model.signUp(email, password);
+		}
+
+		if (result['success']) {
+			Navigator.pushReplacementNamed(context, '/products');
+		} else {
+			showDialog(
+				context: context,
+				builder: (BuildContext context) {
+					return AlertDialog(
+						title: Text('An Error Occurred!'),
+						content: Text(result['message']),
+						actions: <Widget>[
+							FlatButton(
+								child: Text('Okay'),
+								onPressed: () {
+									Navigator.of(context).pop();
+								},
+							)
+						],
+					);
+				});
 		}
 
 	}
