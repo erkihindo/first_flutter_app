@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:first_flutter_app/models/User.dart';
 import 'package:first_flutter_app/scoped_models/UserAndProductsScopedModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 mixin UserScopeModel on UserAndProductsScopedModel {
 	static String apiKey = 'AIzaSyDK9oj7dxbH_Yr4Bym_HUufdnmwlkGKkI4';
@@ -31,12 +32,27 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 
 	void createUserIfSuccessful(
 		bool wasSuccessful,
-		Map<String, dynamic> responseData) {
+		Map<String, dynamic> responseData) async {
 		if (wasSuccessful) {
 			authenticatedUser = new User(
 				id: responseData['localId'],
 				email: responseData['email'],
 				token: responseData['idToken']);
+			final SharedPreferences prefs = await SharedPreferences.getInstance();
+			prefs.setString('token', authenticatedUser.token);
+			prefs.setString('userEmail', authenticatedUser.email);
+			prefs.setString('userId', authenticatedUser.id);
+		}
+	}
+	
+	autoAuthenticate() async {
+		final SharedPreferences prefs = await SharedPreferences.getInstance();
+		final String token = prefs.getString('token');
+		if (token != null) {
+			final String email = prefs.getString('userEmail');
+			final String id = prefs.getString('userId');
+			this.authenticatedUser = User(token: token, id: id, email: email);
+			notifyListeners();
 		}
 	}
 
