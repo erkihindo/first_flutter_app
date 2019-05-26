@@ -1,6 +1,7 @@
 import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:first_flutter_app/widgets/products/products.dart';
+import 'package:first_flutter_app/widgets/ui_elements/LogoutListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -68,7 +69,9 @@ class _ProductsPageState extends State<ProductsPage> {
 						onTap: () {
 							Navigator.pushReplacementNamed(context, '/admin');
 						},
-					)
+					),
+					Divider(),
+					LogoutListTile()
 				],
 			),
 		);

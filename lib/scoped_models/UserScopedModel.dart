@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:first_flutter_app/models/User.dart';
@@ -6,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 mixin UserScopeModel on UserAndProductsScopedModel {
+
+	Timer _authTimer;
 	static String apiKey = 'AIzaSyDK9oj7dxbH_Yr4Bym_HUufdnmwlkGKkI4';
 	final String signUpUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + apiKey;
 	final String signInUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + apiKey;
@@ -30,6 +33,23 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 
 	}
 
+	void logout() async {
+		authenticatedUser = null;
+		final SharedPreferences prefs = await SharedPreferences.getInstance();
+		prefs.remove("idToken");
+		prefs.remove("email");
+		prefs.remove("token");
+		prefs.remove("localId");
+		this._authTimer.cancel();
+		notifyListeners();
+	}
+
+	void setAuthTimeout(num timeSeconds) {
+		this._authTimer = Timer(Duration(seconds: timeSeconds), () {
+			this.logout();
+		});
+	}
+
 	void createUserIfSuccessful(
 		bool wasSuccessful,
 		Map<String, dynamic> responseData) async {
@@ -39,9 +59,13 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 				email: responseData['email'],
 				token: responseData['idToken']);
 			final SharedPreferences prefs = await SharedPreferences.getInstance();
+			final currentTime = DateTime.now();
+			final tokenExpiryTime = currentTime.add(Duration(seconds: num.parse(responseData['expiresIn'])));
 			prefs.setString('token', authenticatedUser.token);
 			prefs.setString('userEmail', authenticatedUser.email);
 			prefs.setString('userId', authenticatedUser.id);
+			prefs.setString('expiryTime', tokenExpiryTime.toIso8601String());
+			this.setAuthTimeout(num.parse(responseData['expiresIn']));
 		}
 	}
 	
@@ -51,6 +75,15 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 		if (token != null) {
 			final String email = prefs.getString('userEmail');
 			final String id = prefs.getString('userId');
+			final expiryTime = DateTime.parse(prefs.getString('expiryTime'));
+			final currentTime = DateTime.now();
+
+			if(expiryTime.isBefore(currentTime)) {
+				print("Token has expired, cant autoAuthenticate");
+				return;
+			}
+			final tokenLifespanSeconds = expiryTime.difference(currentTime).inSeconds;
+			this.setAuthTimeout(tokenLifespanSeconds);
 			this.authenticatedUser = User(token: token, id: id, email: email);
 			notifyListeners();
 		}
