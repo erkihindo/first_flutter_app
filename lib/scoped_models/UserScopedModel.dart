@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:first_flutter_app/models/User.dart';
 import 'package:first_flutter_app/scoped_models/UserAndProductsScopedModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 mixin UserScopeModel on UserAndProductsScopedModel {
-
 	Timer _authTimer;
+	PublishSubject<bool> userSubject = PublishSubject();
+
 	static String apiKey = 'AIzaSyDK9oj7dxbH_Yr4Bym_HUufdnmwlkGKkI4';
 	final String signUpUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + apiKey;
 	final String signInUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + apiKey;
@@ -42,6 +44,8 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 		prefs.remove("localId");
 		this._authTimer.cancel();
 		notifyListeners();
+
+		this.userSubject.add(false);
 	}
 
 	void setAuthTimeout(num timeSeconds) {
@@ -66,6 +70,7 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 			prefs.setString('userId', authenticatedUser.id);
 			prefs.setString('expiryTime', tokenExpiryTime.toIso8601String());
 			this.setAuthTimeout(num.parse(responseData['expiresIn']));
+			this.userSubject.add(true);
 		}
 	}
 	
@@ -85,6 +90,7 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 			final tokenLifespanSeconds = expiryTime.difference(currentTime).inSeconds;
 			this.setAuthTimeout(tokenLifespanSeconds);
 			this.authenticatedUser = User(token: token, id: id, email: email);
+			this.userSubject.add(true);
 			notifyListeners();
 		}
 	}

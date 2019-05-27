@@ -39,7 +39,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 		if (selectedProduct.id == null) {
 			model.addProduct(selectedProduct).then((bool isSuccessful) {
 				if (isSuccessful) {
-					Navigator.pushReplacementNamed(context, '/products').then((_) => model.selectProduct(null));
+					Navigator.pushReplacementNamed(context, '/').then((_) => model.selectProduct(null));
 				} else {
 					showDialog(
 						context: context,
@@ -59,7 +59,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 		} else {
 			model.updateProduct(selectedProduct).then((_) =>
 			{
-			Navigator.pushReplacementNamed(context, '/products').then((_) => model.selectProduct(null))
+			Navigator.pushReplacementNamed(context, '/').then((_) => model.selectProduct(null))
 			});
 		}
 	}

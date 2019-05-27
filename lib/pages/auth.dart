@@ -6,7 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 class AuthPage extends StatefulWidget {
 	final MainScopeModel model;
 
-  const AuthPage({Key key, this.model}) : super(key: key);
+	const AuthPage({Key key, this.model}) : super(key: key);
 
 	@override
 	State<StatefulWidget> createState() {
@@ -70,10 +70,10 @@ class _AuthPageState extends State<AuthPage> {
 		return ScopedModelDescendant<MainScopeModel>(
 			builder: (BuildContext context, Widget child, MainScopeModel model) {
 				return model.isLoading ?
-				CircularProgressIndicator():
+				CircularProgressIndicator() :
 				RaisedButton(
 					color: Colors.white,
-					child: Text(this.authMode == AuthMode.LOGIN ? 'Login': 'Sign up'),
+					child: Text(this.authMode == AuthMode.LOGIN ? 'Login' : 'Sign up'),
 					onPressed: () => _submitForm(model),
 				);
 			});
@@ -91,9 +91,7 @@ class _AuthPageState extends State<AuthPage> {
 			result = await model.signUp(email, password);
 		}
 
-		if (result['success']) {
-			Navigator.pushReplacementNamed(context, '/products');
-		} else {
+		if (!result['success']) {
 			showDialog(
 				context: context,
 				builder: (BuildContext context) {
@@ -111,7 +109,6 @@ class _AuthPageState extends State<AuthPage> {
 					);
 				});
 		}
-
 	}
 
 	DecorationImage _buildBackgroundImage() {

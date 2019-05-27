@@ -19,10 +19,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 	final MainScopeModel model = MainScopeModel();
+	bool isAuthenticated = false;
 
 	@override
 	void initState() {
 		model.autoAuthenticate();
+		model.userSubject.listen((bool isAuthenticated) {
+			setState(() {
+			  this.isAuthenticated = isAuthenticated;
+			});
+		});
 		super.initState();
 	}
 
@@ -35,11 +41,9 @@ class _MyAppState extends State<MyApp> {
 //        brightness: Brightness.dark,
 					primarySwatch: Colors.deepPurple,
 					accentColor: Colors.blue),
-//      home: AuthPage(),
 				routes: {
-					'/': (BuildContext context) => model.authenticatedUser == null ? AuthPage(model: model,) : ProductsPage(mainScopeModel: model,),
-					'/products': (context) => ProductsPage(mainScopeModel: model),
-					'/admin': (context) => ProductAdminPage(model)
+					'/': (BuildContext context) => this.isAuthenticated == false ? AuthPage(model: model,) : ProductsPage(mainScopeModel: model,),
+					'/admin': (context) => this.isAuthenticated == false ? AuthPage(model: model,) : ProductAdminPage(model)
 				},
 			),
 		);
