@@ -13,7 +13,7 @@ class LogoutListTile extends StatelessWidget {
 		    leading: Icon(Icons.exit_to_app),
 		    onTap: () {
 				model.logout();
-				Navigator.pushReplacementNamed(context, '/');
+//				Navigator.pushReplacementNamed(context, '/');
 		    },
 	    );
     },);

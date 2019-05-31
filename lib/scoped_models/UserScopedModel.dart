@@ -43,8 +43,6 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 		prefs.remove("token");
 		prefs.remove("localId");
 		this._authTimer.cancel();
-		notifyListeners();
-
 		this.userSubject.add(false);
 	}
 

@@ -54,7 +54,7 @@ mixin UserAndProductsScopedModel on Model {
 				price: data["price"],
 				userEmail: data["userEmail"],
 				userId: data["userId"],
-				isFavourite: data["isFavourite"],
+				isFavourite: data["likes"] == null ? false : (data["likes"] as Map<String, dynamic>).containsKey(this.authenticatedUser.id),
 			);
 			fetchedProducts.add(productDto);
 		});
