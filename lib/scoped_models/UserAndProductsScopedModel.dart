@@ -13,7 +13,8 @@ mixin UserAndProductsScopedModel on Model {
 
 	Future updateProduct(Product productUpdate) {
 		startSpinner();
-		return http.put('https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json?auth=${this.authenticatedUser.token}',
+		return http.put(
+			'https://first-flutter-app-9a199.firebaseio.com/products/${productUpdate.id}.json?auth=${this.authenticatedUser.token}',
 			body: json.encode(productUpdate.toJson())
 		).then((http.Response response) {
 			stopSpinner();
@@ -31,18 +32,18 @@ mixin UserAndProductsScopedModel on Model {
 		});
 	}
 
-	Future findAllProducts() {
+	Future findAllProducts({bool onlyForUser = false}) {
 		startSpinner();
 		return http.get('https://first-flutter-app-9a199.firebaseio.com/products.json?auth=${this.authenticatedUser.token}')
 			.then((http.Response response) {
 			dynamic productsFromServer = json.decode(response.body);
-			mapServerProductsToProductsDto(productsFromServer);
+			mapServerProductsToProductsDto(productsFromServer, onlyForUser);
 			print(products);
 			stopSpinner();
 		});
 	}
 
-	void mapServerProductsToProductsDto(productsFromServer) {
+	void mapServerProductsToProductsDto(productsFromServer, bool onlyForUser) {
 		if (productsFromServer == null) return;
 		List<Product> fetchedProducts = [];
 		productsFromServer.forEach((String key, dynamic data) {
@@ -58,7 +59,11 @@ mixin UserAndProductsScopedModel on Model {
 			);
 			fetchedProducts.add(productDto);
 		});
-		products = fetchedProducts;
+
+		products = onlyForUser ? fetchedProducts.where((p) {
+			return p.userId == this.authenticatedUser.id;
+		}) :
+		fetchedProducts;
 	}
 
 	void stopSpinner() {
