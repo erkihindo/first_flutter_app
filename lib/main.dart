@@ -3,10 +3,12 @@ import 'package:first_flutter_app/pages/ProductsPage.dart';
 import 'package:first_flutter_app/pages/auth.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:flutter/material.dart';
+import 'package:map_view/map_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 main() {
 //  debugPaintSizeEnabled = true;
+	MapView.setApiKey('AIzaSyAY_8EoEsugfJPx9EVWlrBe9IYjCj3Au-Q');
 	runApp(MyApp());
 }
 
