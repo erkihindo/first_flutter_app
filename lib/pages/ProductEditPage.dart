@@ -1,7 +1,7 @@
 import 'package:first_flutter_app/helpers/EnsureVisible.dart';
 import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
-import 'package:first_flutter_app/widgets/form_inputs/Location.dart';
+import 'package:first_flutter_app/widgets/form_inputs/ImageInput.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,6 +17,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 	final _titleFocusNode = FocusNode();
 	final _descFocusNode = FocusNode();
 	final _priceFocusNode = FocusNode();
+	final _descriptionTextController = TextEditingController();
 
 	_ProductEditPageState();
 
@@ -57,9 +58,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
 				}
 			});
 		} else {
-			model.updateProduct(selectedProduct).then((_) =>
-			{
-			Navigator.pushReplacementNamed(context, '/').then((_) => model.selectProduct(null))
+			model.updateProduct(selectedProduct).then((_) => {
+				Navigator.pushReplacementNamed(context, '/').then((_) => model.selectProduct(null))
 			});
 		}
 	}
@@ -107,6 +107,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 									maxLines: 4,
 									decoration: InputDecoration(labelText: 'Description'),
 									initialValue: selectedProduct?.description,
+									controller: _descriptionTextController,
 									validator: (String input) {
 										if (input
 											.trim()
@@ -137,7 +138,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
 							SizedBox(
 								height: 10.0,
 							),
-							LocationFormInput(),
+//							LocationFormInput(), Disabled because google limits to one call a day
+							ImageFormInput(),
 							SizedBox(
 								height: 10.0,
 							),

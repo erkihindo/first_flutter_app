@@ -1,5 +1,4 @@
 import 'package:first_flutter_app/models/product.dart';
-import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:first_flutter_app/widgets/products/product_card.dart';
 import 'package:flutter/material.dart';
