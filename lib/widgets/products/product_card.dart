@@ -46,7 +46,6 @@ class ProductCard extends StatelessWidget {
                   PriceTag(price: product.price.toString(),)
                 ])),
         AddressTag(address: "Somewhere TLN",),
-        Text(product.userEmail),
         ButtonBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
