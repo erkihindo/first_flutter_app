@@ -14,7 +14,9 @@ class AuthPage extends StatefulWidget {
 	}
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
+	AnimationController _controller;
+
 	final emailRegexp = RegExp(
 		r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 	final TextEditingController _passwordTextController = new TextEditingController();
@@ -23,6 +25,12 @@ class _AuthPageState extends State<AuthPage> {
 	bool acceptTerms = false;
 	final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 	AuthMode authMode = AuthMode.LOGIN;
+
+	@override
+	void initState() {
+		_controller = new AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+		super.initState();
+	}
 
 	Widget createUserForm() {
 		return GestureDetector(
@@ -42,28 +50,36 @@ class _AuthPageState extends State<AuthPage> {
 									children: <Widget>[
 										_buildEmailTextField(),
 										_buildPasswordTextField(),
-										authMode == AuthMode.SIGN_UP ?
-										_buildPasswordConfirmTextField() : Container(),
+										_buildPasswordConfirmTextField(),
 										_buildAcceptSwitch(),
 										SizedBox(
 											height: 10.0,
 										),
-										FlatButton(
-											child: Text('Switch to ${authMode == AuthMode.LOGIN ? "Sign up" : "Login"}'),
-											onPressed: () {
-												setState(() {
-													authMode = authMode == AuthMode.LOGIN ?
-													AuthMode.SIGN_UP :
-													AuthMode.LOGIN;
-												});
-											},
-										),
+										switchBetweenLoginAndSignUpButton(),
 										SizedBox(
 											height: 10.0,
 										),
 										buildLoginButton()
 									],
 								)))))));
+	}
+
+	FlatButton switchBetweenLoginAndSignUpButton() {
+		return FlatButton(
+			child: Text('Switch to ${authMode == AuthMode.LOGIN ? "Sign up" : "Login"}'),
+			onPressed: () {
+				setState(() {
+					if (authMode == AuthMode.LOGIN) {
+						authMode = AuthMode.SIGN_UP;
+						_controller.forward();
+
+					} else {
+						authMode = AuthMode.LOGIN;
+						_controller.reverse();
+					}
+				});
+			},
+		);
 	}
 
 	Widget buildLoginButton() {
@@ -164,20 +180,22 @@ class _AuthPageState extends State<AuthPage> {
 		);
 	}
 
-	TextFormField _buildPasswordConfirmTextField() {
-		return TextFormField(
-			obscureText: true,
-			decoration: InputDecoration(
-				labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
-			validator: (String value) {
-				if (_passwordTextController.text != value) {
-					return 'Passwords do not match';
-				}
-			},
-			onSaved: (newValue) {
-				password = newValue;
-			},
-		);
+	Widget _buildPasswordConfirmTextField() {
+		return FadeTransition(
+			opacity: CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+			child: TextFormField(
+				obscureText: true,
+				decoration: InputDecoration(
+					labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
+				validator: (String value) {
+					if (_passwordTextController.text != value) {
+						return 'Passwords do not match';
+					}
+				},
+				onSaved: (newValue) {
+					password = newValue;
+				},
+			),);
 	}
 
 	@override
