@@ -188,12 +188,9 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
 				decoration: InputDecoration(
 					labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
 				validator: (String value) {
-					if (_passwordTextController.text != value) {
+					if (authMode == AuthMode.SIGN_UP && _passwordTextController.text != value) {
 						return 'Passwords do not match';
 					}
-				},
-				onSaved: (newValue) {
-					password = newValue;
 				},
 			),);
 	}
