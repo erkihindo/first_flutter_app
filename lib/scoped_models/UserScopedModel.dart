@@ -36,6 +36,7 @@ mixin UserScopeModel on UserAndProductsScopedModel {
 	}
 
 	void logout() async {
+		this.selectedProductIndex = null;
 		authenticatedUser = null;
 		final SharedPreferences prefs = await SharedPreferences.getInstance();
 		prefs.remove("idToken");

@@ -1,3 +1,4 @@
+import 'package:first_flutter_app/helpers/custom_route.dart';
 import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/pages/productDetails.dart';
 import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
@@ -56,7 +57,7 @@ class ProductCard extends StatelessWidget {
               color: Theme.of(context).accentColor,
               onPressed: () => Navigator.push<bool>(
                   context,
-                  MaterialPageRoute(
+	              CustomRoute(
                       builder: (context) =>
                           ProductDetails(product)))
                   .then((bool value) {}),

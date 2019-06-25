@@ -1,3 +1,4 @@
+import 'package:first_flutter_app/helpers/custom_route.dart';
 import 'package:first_flutter_app/pages/ProductEditPage.dart';
 import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
@@ -71,7 +72,7 @@ class ProductListPageState extends State<ProductListPage> {
 						onPressed: () {
 							model.selectProduct(productsService.products[index].id);
 							Navigator.of(context)
-								.push(MaterialPageRoute(builder: (context) {
+								.push(CustomRoute(builder: (context) {
 								return ProductEditPage();
 							})).then((_) {
 								productsService.selectProduct(null);

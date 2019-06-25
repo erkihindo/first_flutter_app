@@ -1,7 +1,6 @@
 import 'package:first_flutter_app/models/product.dart';
 import 'package:first_flutter_app/widgets/products/ProductCardFloatingButton.dart';
 import 'package:first_flutter_app/widgets/products/addressTag.dart';
-import 'package:first_flutter_app/widgets/ui_elements/TitleDefault.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatelessWidget {

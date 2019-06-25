@@ -1,4 +1,3 @@
-import 'package:first_flutter_app/scoped_models/ProductsScopedModel.dart';
 import 'package:first_flutter_app/scoped_models/mainScope.dart';
 import 'package:first_flutter_app/widgets/products/products.dart';
 import 'package:first_flutter_app/widgets/ui_elements/LogoutListTile.dart';
